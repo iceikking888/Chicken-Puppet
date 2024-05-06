@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-// using System.Numerics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -9,15 +8,22 @@ public class SimpleBodyControl : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    // GameObjects of Interest
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject head;
     [SerializeField] private GameObject leftHand;
     [SerializeField] private GameObject rightHand;
+    [SerializeField] private GameObject offset;
+
+    // Offsets
+    [SerializeField] private Vector3 positionOffset;
+    [SerializeField] private Vector3 rotationalOffset;
 
 
     void Start()
     {
-        
+        offset.transform.localPosition = positionOffset;
+        offset.transform.localRotation = Quaternion.Euler(rotationalOffset);
     }
 
     // Update is called once per frame
@@ -26,11 +32,19 @@ public class SimpleBodyControl : MonoBehaviour
         
     }
 
+    public void DebugHead(InputAction.CallbackContext context)
+    {
+        Debug.Log("Head");
+        Vector3 input = context.ReadValue<Vector3>();
+        Debug.Log(input);
+    }
+
     public void SetHeadOrientation(InputAction.CallbackContext context)
     {
         Debug.Log("Head");
-        Quaternion inputVector = context.ReadValue<Quaternion>();
-        head.transform.rotation = inputVector;
+        Quaternion inputQ = context.ReadValue<Quaternion>();
+        Debug.Log(inputQ);
+        head.transform.rotation = inputQ;
     }
 
     public void SetPlayerPose(InputAction.CallbackContext context)
@@ -42,16 +56,16 @@ public class SimpleBodyControl : MonoBehaviour
 
     public void SetLeftHandPose(InputAction.CallbackContext context)
     {
-        Debug.Log("Left");
+        // Debug.Log("Left");
         Vector3 inputVector = context.ReadValue<Vector3>();
-        leftHand.transform.position = inputVector;
+        leftHand.transform.localPosition = inputVector + new Vector3(0,1f, 0);
 
     }
 
     public void SetRightHandPose(InputAction.CallbackContext context)
     {
-        Debug.Log("Right");
+        // Debug.Log("Right");
         Vector3 inputVector = context.ReadValue<Vector3>();
-        rightHand.transform.position = inputVector;
+        rightHand.transform.localPosition = inputVector + new Vector3(0,1f, 0);
     }
 }
